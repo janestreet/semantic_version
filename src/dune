@@ -1,0 +1,2 @@
+(library (name semantic_version) (public_name semantic_version)
+ (libraries core re) (preprocess (pps ppx_jane)))
