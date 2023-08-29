@@ -8,7 +8,7 @@ module type S = sig
     ; pre_release_tags : string list
     ; build_metadata : string list
     }
-  [@@deriving fields, sexp_of]
+  [@@deriving sexp_of]
 
   include Comparable.S with type t := t
   include Stringable.S with type t := t

@@ -34,7 +34,7 @@ module Stable = struct
       ; pre_release_tags : Pre_release_tags.t
       ; build_metadata : string list [@compare.ignore]
       }
-    [@@deriving bin_io, compare, fields]
+    [@@deriving bin_io, compare]
 
     let to_string { major; minor; patch; pre_release_tags; build_metadata } =
       let version = Printf.sprintf "%d.%d.%d" major minor patch in
