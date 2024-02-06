@@ -1,2 +1,5 @@
-(library (name semantic_version_test) (libraries core semantic_version)
- (preprocess (pps ppx_jane)))
+(library
+ (name semantic_version_test)
+ (libraries core semantic_version)
+ (preprocess
+  (pps ppx_jane)))
