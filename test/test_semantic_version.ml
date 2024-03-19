@@ -67,7 +67,8 @@ let%expect_test "Test precedence" =
     1.2.0
     1.11.0
     2.0.0
-    11.0.0 |}]
+    11.0.0
+    |}]
 ;;
 
 let%expect_test "Build metadata is ignored when comparing versions" =
