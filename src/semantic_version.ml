@@ -3,8 +3,8 @@ module Stable = struct
 
   module V1 = struct
     module Pre_release_tags = struct
-      type tag = string [@@deriving bin_io]
-      type t = tag list [@@deriving bin_io]
+      type tag = string [@@deriving bin_io, stable_witness]
+      type t = tag list [@@deriving bin_io, stable_witness]
 
       let compare_tag t1 t2 =
         let maybe_int x = Core.(Option.try_with (fun () -> Int.of_string x)) in
@@ -34,7 +34,7 @@ module Stable = struct
       ; pre_release_tags : Pre_release_tags.t
       ; build_metadata : string list [@compare.ignore]
       }
-    [@@deriving bin_io, compare]
+    [@@deriving bin_io, compare, stable_witness]
 
     let to_string { major; minor; patch; pre_release_tags; build_metadata } =
       let version = Printf.sprintf "%d.%d.%d" major minor patch in

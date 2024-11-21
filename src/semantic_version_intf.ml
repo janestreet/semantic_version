@@ -8,7 +8,7 @@ module type S = sig
     ; pre_release_tags : string list
     ; build_metadata : string list
     }
-  [@@deriving sexp_of]
+  [@@deriving sexp]
 
   include Comparable.S with type t := t
   include Stringable.S with type t := t
@@ -22,7 +22,8 @@ module type S = sig
   (* [Stable] versions below are unrelated to and should not be confused with the version
      of the Semantic Versioning specification, which as of this writing is 2.0.0. *)
   module Stable : sig
-    module V1 : Stable with type t = t and type comparator_witness = comparator_witness
+    module V1 :
+      Stable_with_witness with type t = t and type comparator_witness = comparator_witness
   end
 end
 
