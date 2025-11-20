@@ -16,9 +16,9 @@ module Stable = struct
       ;;
 
       let compare t1 t2 =
-        (* The pre-release tag list comparison is a bit quirky. An empty list is
-           greater than a non-empty list, but a longer list is greater than a shorter
-           list if all preceding tags are equal. *)
+        (* The pre-release tag list comparison is a bit quirky. An empty list is greater
+           than a non-empty list, but a longer list is greater than a shorter list if all
+           preceding tags are equal. *)
         match t1, t2 with
         | [], [] -> 0
         | [], _ :: _ -> 1
