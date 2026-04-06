@@ -6,6 +6,7 @@ bug-reports: "https://github.com/janestreet/semantic_version/issues"
 dev-repo: "git+https://github.com/janestreet/semantic_version.git"
 doc: "https://ocaml.janestreet.com/ocaml-core/latest/doc/semantic_version/index.html"
 license: "MIT"
+x-maintenance-intent: ["(latest)"]
 build: [
   ["dune" "build" "-p" name "-j" jobs]
 ]
