@@ -1,6 +1,6 @@
 open Core
 
-module type S = sig
+module type%template [@mode m = (local, global)] S = sig
   type t = private
     { major : int
     ; minor : int
@@ -10,7 +10,7 @@ module type S = sig
     }
   [@@deriving sexp]
 
-  include Comparable.S with type t := t
+  include Comparable.S [@mode m] with type t := t
   include Stringable.S with type t := t
 
   val initial_dev_release : t
