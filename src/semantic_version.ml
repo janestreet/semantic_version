@@ -6,16 +6,21 @@ module Stable = struct
       type tag = string [@@deriving bin_io, stable_witness]
       type t = tag list [@@deriving bin_io, stable_witness]
 
-      let compare_tag t1 t2 =
-        let maybe_int x = Core.(Option.try_with (fun () -> Int.of_string x)) in
+      let maybe_int x =
+        match Core.Int.of_string x with
+        | x -> Some x
+        | exception _ -> None
+      ;;
+
+      let%template[@mode m = local] compare_tag t1 t2 =
         match maybe_int t1, maybe_int t2 with
-        | None, None -> [%compare: string] t1 t2
-        | Some x, Some y -> [%compare: int] x y
+        | None, None -> ([%compare: string] [@mode.explicit m]) t1 t2
+        | Some x, Some y -> ([%compare: int] [@mode.explicit m]) x y
         | None, Some _ -> 1
         | Some _, None -> -1
       ;;
 
-      let compare t1 t2 =
+      let%template[@mode m = local] compare t1 t2 =
         (* The pre-release tag list comparison is a bit quirky. An empty list is greater
            than a non-empty list, but a longer list is greater than a shorter list if all
            preceding tags are equal. *)
@@ -23,7 +28,7 @@ module Stable = struct
         | [], [] -> 0
         | [], _ :: _ -> 1
         | _ :: _, [] -> -1
-        | _ :: _, _ :: _ -> [%compare: tag list] t1 t2
+        | _ :: _, _ :: _ -> ([%compare: tag list] [@mode.explicit m]) t1 t2
       ;;
     end
 
@@ -34,7 +39,7 @@ module Stable = struct
       ; pre_release_tags : Pre_release_tags.t
       ; build_metadata : string list [@compare.ignore]
       }
-    [@@deriving bin_io, compare, stable_witness]
+    [@@deriving bin_io, compare ~localize, stable_witness]
 
     let to_string { major; minor; patch; pre_release_tags; build_metadata } =
       let version = Printf.sprintf "%d.%d.%d" major minor patch in
@@ -116,7 +121,8 @@ include Semantic_version_intf
 module Make () = struct
   module Stable = Stable
   include Stable.Latest
-  include Comparable.Make_using_comparator (Stable.Latest)
+
+  include%template Comparable.Make_using_comparator [@mode local] (Stable.Latest)
 
   let initial_dev_release =
     { major = 0; minor = 1; patch = 0; pre_release_tags = []; build_metadata = [] }
